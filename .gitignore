@@ -1,0 +1,7 @@
+node_modules
+api/env.json
+.idea
+npm-debug.log
+/public/custom/
+/public/custom-new/
+/public/custom-old/

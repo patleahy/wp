@@ -1,0 +1,25 @@
+extends layout/layout
+
+block content
+  #intro
+    .hidden-xs.hidden-sm.hidden-md
+      a(href='custom')
+        img(src='./images/home-lg.jpg')
+    .hidden-xs.hidden-sm.hidden-lg
+      a(href='custom')
+        img(src='./images/home-md.jpg')
+    .hidden-md.hidden-lg
+      a(href='custom')
+        img(src='./images/home-sm.jpg')
+    h1 Wilburton Pottery
+    h2 Hand crafted tiles for home and garden
+    a.btn(href='custom')
+      i.fa.fa-photo.fa-x2
+      | &nbsp;&nbsp;Gallery
+    a.btn(href='store')
+      i.fa.fa-shopping-bag.fa-x2
+      |  &nbsp;&nbsp;Store
+
+block scripts
+  script.
+    $.get('/api/store');

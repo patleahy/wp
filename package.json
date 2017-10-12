@@ -1,0 +1,23 @@
+{
+  "name": "wp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "",
+  "dependencies": {
+    "async": "2.1.4",
+    "aws-sdk": "2.7.21",
+    "compression": "1.6.2",
+    "express": "4.14.0",
+    "express-session": "1.15.0",
+    "googleapis": "16.0.0",
+    "node-rest-client": "2.0.1",
+    "oauth": "0.9.7",
+    "pug": "2.0.0-beta6",
+    "sitemap": "1.9.0"
+  }
+}

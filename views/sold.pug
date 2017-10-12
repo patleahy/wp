@@ -1,0 +1,16 @@
+extends layout/layout
+
+block content
+  #store
+    h3 Sold
+
+    #sold_gallery
+      .fa.fa-circle-o-notch.fa-spin
+      | Loading...
+
+block scripts
+  include  partial/react_scripts
+
+  script(src='./scripts/sold.js')
+  script(type='text/babel').
+    ReactDOM.render(<Sold />, document.getElementById('sold_gallery'));

@@ -1,0 +1,23 @@
+extends layout/layout
+
+block content
+  #store
+    h3 Store
+    p
+      | A selection of our tiles are available for purchase through our&nbsp;
+      a(href="https://www.etsy.com/shop/WilburtonPottery", target="etsy") Etsy Store
+      | .
+
+    #store_gallery
+      .fa.fa-circle-o-notch.fa-spin
+      | Loading...
+
+    p
+      a(href="https://www.etsy.com/shop/WilburtonPottery#policies", target="etsy") Shop policies, Payment Methods and Shipping
+
+block scripts
+    include  partial/react_scripts
+
+    script(src='./scripts/store.js')
+    script(type='text/babel').
+      ReactDOM.render(<Store />, document.getElementById('store_gallery'));
