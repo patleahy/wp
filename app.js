@@ -95,7 +95,10 @@ clientRouter.route('*favicon.ico')
 
 clientRouter.route('/:page')
   .get(function(req, res) {
-    res.render(req.params.page);
+    // Be paranoid about filenames to prevent path traversal attacks.
+    // Only allow word characters, including '_'.
+    var page = req.params.page.replace(/\W/, '');
+    res.render(page);
   });
 clientRouter.route('*')
   .get(function(req, res) {
