@@ -1,3 +1,5 @@
+# Wilbrton Pottery
+
 This is a site I created for my wife's family's business, [WilburtonPottery.com](http://www.wilburtonpottery.com).
 
 The site is built using Express/Node.js with Pug templates and React on the client.
@@ -11,3 +13,9 @@ The other interesting page is [the gallery](http://www.wilburtonpottery.com/cust
 The images and descriptions for the Gallery are stored in an AWS S3 bucket. The gallery pages were created using the S3 APIs. 
 However, like the store that was too slow so a [Python script](https://github.com/patleahy/wp-gen/blob/master/custom/main.py) us used to generate static pages. 
 This is manually run after new images are uploaded to the S3 bucket.
+
+---
+
+This work is Copyright 2017 © Pat Leahy [pat@patleahy.com](mailto:patleahy.com) and [Wilburton Pottery](http://www.wilburtonpottery.com).
+
+It is shown here only as an example the work of Pat Leahy.
