@@ -4,7 +4,8 @@
 
 var cfg = require('../cfg.json');
 
-var port = 8080;
+var http_port = 8080;
+var https_port = 8443;
 
 var path = require('path');
 
@@ -126,7 +127,21 @@ app.use(function (err, req, res, next) {
   }
 });
 
-// Start the app.
-app.listen(port, function(err) {
-  console.log('info: ' + (new Date()).toJSON() + ' | ' + 'server on port ' + port);
-});
+// Setup https server
+var https = require('https');
+var keys_dir = '../keys/';
+var fs = require('fs');
+var https_options = {
+  key  : fs.readFileSync(keys_dir + 'privkey.pem'),
+  cert : fs.readFileSync(keys_dir + 'fullchain.pem')
+};
+https.createServer(https_options, app).listen(https_port);
+console.log('https on ' + https_port);
+
+// Setup server to redirect http to https
+var http = require('http');
+http.createServer(function (req, res) {
+    res.writeHead(301, { "Location": "https://" + req.headers['host'] + req.url });
+    res.end();
+}).listen(http_port);
+console.log('http on ' + http_port + ', redirect to https');
