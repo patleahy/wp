@@ -1,1 +1,102 @@
-'use strict';var _createClass=function(){function defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if('value'in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor)}}return function(Constructor,protoProps,staticProps){if(protoProps)defineProperties(Constructor.prototype,protoProps);if(staticProps)defineProperties(Constructor,staticProps);return Constructor}}();function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError('Cannot call a class as a function')}}function _possibleConstructorReturn(self,call){if(!self){throw new ReferenceError('this hasn\'t been initialised - super() hasn\'t been called')}return call&&(typeof call==='object'||typeof call==='function')?call:self}function _inherits(subClass,superClass){if(typeof superClass!=='function'&&superClass!==null){throw new TypeError('Super expression must either be null or a function, not '+typeof superClass)}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,enumerable:false,writable:true,configurable:true}});if(superClass)Object.setPrototypeOf?Object.setPrototypeOf(subClass,superClass):subClass.__proto__=superClass}var Store=function(_React$Component){_inherits(Store,_React$Component);function Store(props){_classCallCheck(this,Store);var _this=_possibleConstructorReturn(this,(Store.__proto__||Object.getPrototypeOf(Store)).call(this,props));_this.state={sections:{},items:[],selected:''};return _this}_createClass(Store,[{key:'componentDidMount',value:function componentDidMount(){var _this2=this;var selected=location.hash;if(selected!=''){selected=selected.substr(1)}$.get('/api/store',function(results){results['selected']=selected;_this2.setState(results)})}},{key:'render',value:function render(){var that=this;if(this.state.items.length==0){return React.createElement('p',null,React.createElement('i',{className:'fa fa-circle-o-notch fa-spin'}),' Loading...')}var selected=this.state.selected;var sections=[React.createElement('a',{className:'btn '+(selected==''?'active':'inactive'),href:'#',onClick:that.linkClicked.bind(that,'')},'All')];this.state.sections.forEach(function(section){sections.push(React.createElement('a',{className:'btn '+(selected==section?'active':'inactive'),href:'#'+section,onClick:that.linkClicked.bind(that,section)},section))});var active_items=[];if(selected==''){active_items=this.state.items}else{this.state.items.forEach(function(item){if(item.section==selected){active_items.push(item)}})}var rows=core.array_chunk(active_items,4);return React.createElement('div',{className:'container-fluid'},React.createElement('div',{className:'sections'},sections),React.createElement('div',{className:'items'},rows.map(function(row){return React.createElement('div',{className:'row'},row.map(function(item){return React.createElement('div',{className:'col-sm-3'},React.createElement('a',{href:item.url,target:'etsy'},React.createElement('img',{src:item.small_img}),React.createElement('p',null,core.unescape(item.title),React.createElement('br',null),'$ ',item.price,React.createElement('br',null),'id: ',item.id.toString(16))))}))})))}},{key:'linkClicked',value:function linkClicked(selected,event){this.state.selected=selected;window.location.hash=selected;this.setState(this.state)}}]);return Store}(React.Component);
+// Get the store items from the server API and render them.
+// We get all the items in one API call. Section filtering is then done here in the client code.
+//
+// Pat Leahy pat@patleahy.com
+class Store extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      sections: {},  // The list of sections which items can belong to.
+      items:  [],    // All the items.
+      selected: ''   // The currently selected section.
+    };
+  }
+
+  componentDidMount() {
+
+    // The currently selected section will be in the URL hash.
+    var selected = location.hash;
+    if (selected != "") {
+      // Strip off the '#' char.
+      selected = selected.substr(1);
+    }
+
+    // Load all the items.
+    $.get('/api/store', results => {
+      results['selected'] = selected;
+      this.setState(results);
+    });
+  }
+
+  render() {
+    var that = this;
+
+    // state is null before anything is loaded.
+    if (this.state.items.length == 0) {
+      return (<p><i className="fa fa-circle-o-notch fa-spin"/> Loading...</p>);
+    }
+
+    // Show the list of sections with the selected one active.
+    var selected = this.state.selected;
+
+    var sections = [
+      <a className={"btn " + (selected == "" ? "active" : "inactive")} href={"#"} onClick={that.linkClicked.bind(that, "")}>{"All"}</a>
+    ];
+
+    this.state.sections.forEach((section) => {
+      sections.push(
+          <a className={"btn " + (selected == section ? "active" : "inactive")} href={"#" + section} onClick={that.linkClicked.bind(that, section)}>{section}</a>
+      );
+    });
+
+    // Get the items for the selected section.
+    var active_items = [];
+    if (selected == "") {
+      active_items = this.state.items;
+    } else {
+      this.state.items.forEach(function(item) {
+        if (item.section == selected) {
+          active_items.push(item);
+        }
+      });
+    }
+
+    // Show the items in 4 columns.
+    var rows = core.array_chunk(active_items, 4);
+
+    // Render the items.
+    // We will convert the Etsy IDs to hex to show a short identifier for each item which people can refer to.
+    return (
+      <div className="container-fluid">
+        <div className="sections">{sections}</div>
+        <div className="items">
+          {
+            rows.map(row =>
+              <div className="row">
+                {
+                  row.map(item =>
+                    <div className="col-sm-3">
+                      <a href={item.url} target="etsy">
+                        <img src={item.small_img} />
+                        <p>{core.unescape(item.title)}<br/>$ {item.price}<br/>id: {item.id.toString(16)}</p>
+                      </a>
+                    </div>
+                  )
+                }
+              </div>
+            )
+        }
+        </div>
+      </div>
+    );
+  }
+
+  // When a section is clicked get the selected name from the hash in the linked clicked on
+  // and then re-render this control.
+  linkClicked(selected, event) {
+    this.state.selected = selected;
+    window.location.hash = selected;
+    this.setState(this.state);
+  }
+}
